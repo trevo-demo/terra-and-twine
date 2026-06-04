@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTrevo } from "@trevosdk/react";
 
 export default function CheckoutForm({ totalCents }: { totalCents: number }) {
+  const trevo = useTrevo();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,6 +32,10 @@ export default function CheckoutForm({ totalCents }: { totalCents: number }) {
       return;
     }
 
+    trevo?.track("purchase_completed", {
+      value: totalCents / 100,
+      orderId: json.orderId,
+    });
     router.push(
       `/checkout/success?order=${encodeURIComponent(json.orderId)}&total=${json.totalCents}`,
     );

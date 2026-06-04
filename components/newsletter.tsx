@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useTrevo } from "@trevosdk/react";
 
 export default function Newsletter() {
+  const trevo = useTrevo();
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
 
   async function subscribe(event: React.FormEvent<HTMLFormElement>) {
@@ -15,6 +17,7 @@ export default function Newsletter() {
       body: JSON.stringify({ email }),
     });
     if (res.ok) {
+      trevo?.track("newsletter_signup");
       setState("done");
     } else {
       setState("idle");

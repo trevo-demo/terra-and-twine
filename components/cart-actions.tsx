@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTrevo } from "@trevosdk/react";
 
 export function RemoveFromCart({ slug }: { slug: string }) {
   const router = useRouter();
@@ -26,9 +27,11 @@ export function RemoveFromCart({ slug }: { slug: string }) {
 }
 
 export function CheckoutButton({ totalCents }: { totalCents: number }) {
+  const trevo = useTrevo();
   const router = useRouter();
 
   function startCheckout() {
+    trevo?.track("checkout_started", { value: totalCents / 100 });
     router.push("/checkout");
   }
 
