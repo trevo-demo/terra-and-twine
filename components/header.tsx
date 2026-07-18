@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { cartCount, readCart } from "@/lib/cart";
+import ShippingBanner from "./shipping-banner";
 
 export default async function Header() {
   const cart = await readCart();
   const count = cartCount(cart);
 
   return (
+    <>
+      <ShippingBanner />
     <header className="sticky top-0 z-10 border-b border-stone-200 bg-stone-50/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between px-4 py-4">
         <Link href="/" className="text-xl font-semibold tracking-tight">
@@ -29,5 +32,6 @@ export default async function Header() {
         </nav>
       </div>
     </header>
+    </>
   );
 }
