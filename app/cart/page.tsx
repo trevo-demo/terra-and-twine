@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { cartLines, cartTotal, readCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/products";
+import { quoteShipping } from "@/lib/shipping";
+import CartReassurance from "@/components/cart-reassurance";
 import { RemoveFromCart, CheckoutButton } from "@/components/cart-actions";
 
 export const dynamic = "force-dynamic";
@@ -61,9 +63,7 @@ export default async function CartPage() {
         <p className="text-stone-500">Subtotal</p>
         <p className="text-xl font-semibold">{formatPrice(total)}</p>
       </div>
-      <p className="mt-1 text-right text-sm text-stone-400">
-        Shipping calculated at checkout
-      </p>
+      <CartReassurance quote={quoteShipping(total)} />
       <CheckoutButton totalCents={total} />
     </div>
   );
