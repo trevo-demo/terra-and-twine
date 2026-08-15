@@ -1,19 +1,8 @@
-"use client";
-
-import { useExperiment } from "@trevosdk/react";
 import { formatPrice } from "@/lib/products";
 import type { ShippingQuote } from "@/lib/shipping";
 
-/** Experiment: cart-reassurance. The quote comes from the server rule. */
+/** Shipped after cart-reassurance won: the cart argues for checkout. */
 export default function CartReassurance({ quote }: { quote: ShippingQuote }) {
-  const variant = useExperiment("cart-reassurance");
-  if (variant !== "reassurance") {
-    return (
-      <p className="mt-1 text-right text-sm text-stone-400">
-        Shipping calculated at checkout
-      </p>
-    );
-  }
   const threshold = quote.subtotalCents + quote.centsToFreeShipping;
   const progress = threshold > 0 ? Math.min(1, quote.subtotalCents / threshold) : 1;
   return (
