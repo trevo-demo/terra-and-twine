@@ -113,6 +113,23 @@ export function getProduct(slug: string): Product | undefined {
   return PRODUCTS.find((p) => p.slug === slug);
 }
 
+/**
+ * Experiment: pdp-related-products. Same category first, then whatever is
+ * best stocked; the product itself is excluded. Runs on the server so the
+ * shelf is in the HTML, not a second round-trip.
+ */
+export function relatedProducts(slug: string, limit = 4): Product[] {
+  const current = getProduct(slug);
+  if (!current) return [];
+  return PRODUCTS.filter((p) => p.slug !== slug)
+    .sort((a, b) => {
+      const sameA = a.category === current.category ? 1 : 0;
+      const sameB = b.category === current.category ? 1 : 0;
+      return sameB - sameA || b.stock - a.stock;
+    })
+    .slice(0, limit);
+}
+
 export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
