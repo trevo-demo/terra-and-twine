@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { PRODUCTS, formatPrice } from "@/lib/products";
+import { PRODUCTS } from "@/lib/products";
+import CatalogCard from "@/components/catalog-card";
 
 export default function Home() {
   return (
@@ -26,22 +26,7 @@ export default function Home() {
         </h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {PRODUCTS.map((product) => (
-            <Link
-              key={product.slug}
-              href={`/products/${product.slug}`}
-              className="group rounded-xl border border-stone-200 bg-white p-4 transition hover:shadow-md"
-            >
-              <div
-                className={`mb-3 flex aspect-square items-center justify-center rounded-lg bg-gradient-to-br text-6xl ${product.gradient}`}
-              >
-                {product.emoji}
-              </div>
-              <h3 className="font-medium group-hover:text-emerald-700">
-                {product.name}
-              </h3>
-              <p className="text-sm text-stone-500">{product.tagline}</p>
-              <p className="mt-2 font-semibold">{formatPrice(product.price)}</p>
-            </Link>
+            <CatalogCard key={product.slug} product={product} />
           ))}
         </div>
       </section>
