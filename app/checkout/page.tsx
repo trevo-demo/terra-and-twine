@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { cartLines, cartTotal, readCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/products";
-import { quoteShipping } from "@/lib/shipping";
+import { quoteShipping, shippingVariant } from "@/lib/shipping";
 import CheckoutForm from "@/components/checkout-form";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +11,10 @@ export default async function CheckoutPage() {
   const cart = await readCart();
   const lines = cartLines(cart);
   const total = cartTotal(cart);
-  const quote = quoteShipping(total);
+  const quote = quoteShipping(
+    total,
+    shippingVariant((await cookies()).get("trevo_id")?.value),
+  );
 
   if (lines.length === 0) {
     return (
