@@ -1,17 +1,7 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { PRODUCTS, formatPrice } from "@/lib/products";
-import { rankedProducts } from "@/lib/ranking";
-import { trevoServer } from "@/lib/trevo-server";
 
-// Experiment: catalog-ranking-server. Resolved per request from the visitor
-// identity so the order is stable for a shopper across visits.
-export default async function Home() {
-  const anonymousId = (await cookies()).get("trevo_id")?.value;
-  const variant = anonymousId
-    ? trevoServer()?.getVariant("catalog-ranking-server", { anonymousId })
-    : "control";
-  const products = variant === "ranked" ? await rankedProducts() : PRODUCTS;
+export default function Home() {
   return (
     <div>
       <section className="mb-10 rounded-2xl bg-gradient-to-br from-emerald-100 to-lime-100 p-10">
@@ -35,7 +25,7 @@ export default async function Home() {
           The catalog
         </h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
+          {PRODUCTS.map((product) => (
             <Link
               key={product.slug}
               href={`/products/${product.slug}`}
