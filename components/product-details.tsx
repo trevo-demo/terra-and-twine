@@ -1,4 +1,5 @@
 import { formatPrice, type Product } from "@/lib/products";
+import StockLine from "./stock-line";
 
 /** Buy block first: shipped after product-buy-block-first won. */
 export default function ProductDetails({
@@ -13,9 +14,7 @@ export default function ProductDetails({
       <p className="text-sm uppercase tracking-wide text-emerald-700">{product.category}</p>
       <h1 className="mt-1 text-3xl font-semibold tracking-tight">{product.name}</h1>
       <p className="mt-2 text-2xl font-semibold">{formatPrice(product.price)}</p>
-      <p className="mt-3 text-sm text-stone-500">
-        {product.stock > 25 ? "In stock" : `Only ${product.stock} left in stock`}
-      </p>
+      <StockLine stock={product.stock} />
       {children}
       <ul className="mt-6 space-y-1 text-sm text-stone-500">
         <li>✓ Free shipping over $50</li>
