@@ -3,7 +3,6 @@ import { getTrevoBootstrap } from "@trevosdk/nextjs";
 import { TrevoProvider } from "@trevosdk/react";
 import Header from "@/components/header";
 import Newsletter from "@/components/newsletter";
-import TrustStrip from "@/components/trust-strip";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,7 +27,6 @@ export default async function RootLayout({
           bootstrap={bootstrap}
         >
           <Header />
-          <TrustStrip />
           <main className="flex-1 mx-auto w-full max-w-5xl px-4 py-8">
             {children}
           </main>
