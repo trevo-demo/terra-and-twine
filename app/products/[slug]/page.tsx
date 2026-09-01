@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PRODUCTS, formatPrice, getProduct } from "@/lib/products";
+import { PRODUCTS, getProduct } from "@/lib/products";
 import AddToCart from "@/components/add-to-cart";
+import ProductDetails from "@/components/product-details";
 import TrackView from "@/components/track-view";
 
 export function generateStaticParams() {
@@ -29,31 +30,9 @@ export default async function ProductPage({
         >
           {product.emoji}
         </div>
-        <div>
-          <p className="text-sm uppercase tracking-wide text-emerald-700">
-            {product.category}
-          </p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight">
-            {product.name}
-          </h1>
-          <p className="mt-2 text-2xl font-semibold">
-            {formatPrice(product.price)}
-          </p>
-          <p className="mt-4 leading-relaxed text-stone-600">
-            {product.description}
-          </p>
-          <p className="mt-3 text-sm text-stone-500">
-            {product.stock > 25
-              ? "In stock"
-              : `Only ${product.stock} left in stock`}
-          </p>
+        <ProductDetails product={product}>
           <AddToCart slug={product.slug} priceCents={product.price} />
-          <ul className="mt-8 space-y-1 border-t border-stone-200 pt-4 text-sm text-stone-500">
-            <li>✓ Free shipping over $50</li>
-            <li>✓ 30-day returns, no questions asked</li>
-            <li>✓ Carbon-neutral delivery</li>
-          </ul>
-        </div>
+        </ProductDetails>
       </div>
     </div>
   );
