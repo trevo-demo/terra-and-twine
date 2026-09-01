@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { cartLines, cartTotal, readCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/products";
-import { quoteShipping } from "@/lib/shipping";
+import { quoteShipping, shippingVariant } from "@/lib/shipping";
 import CartReassurance from "@/components/cart-reassurance";
 import { RemoveFromCart, CheckoutButton } from "@/components/cart-actions";
 
@@ -11,6 +12,7 @@ export default async function CartPage() {
   const cart = await readCart();
   const lines = cartLines(cart);
   const total = cartTotal(cart);
+  const variant = shippingVariant((await cookies()).get("trevo_id")?.value);
 
   if (lines.length === 0) {
     return (
@@ -63,7 +65,7 @@ export default async function CartPage() {
         <p className="text-stone-500">Subtotal</p>
         <p className="text-xl font-semibold">{formatPrice(total)}</p>
       </div>
-      <CartReassurance quote={quoteShipping(total)} />
+      <CartReassurance quote={quoteShipping(total, variant)} />
       <CheckoutButton totalCents={total} />
     </div>
   );
