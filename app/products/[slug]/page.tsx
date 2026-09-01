@@ -1,11 +1,8 @@
 import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { PRODUCTS, getProduct } from "@/lib/products";
-import { trevoServer } from "@/lib/trevo-server";
 import AddToCart from "@/components/add-to-cart";
 import ProductDetails from "@/components/product-details";
-import RelatedProducts from "@/components/related-products";
 import TrackView from "@/components/track-view";
 
 export function generateStaticParams() {
@@ -20,13 +17,6 @@ export default async function ProductPage({
   const { slug } = await params;
   const product = getProduct(slug);
   if (!product) notFound();
-
-  // Experiment: pdp-related-products. Resolved per request from the visitor
-  // identity so the same shopper sees the same page across visits.
-  const anonymousId = (await cookies()).get("trevo_id")?.value;
-  const variant = anonymousId
-    ? trevoServer()?.getVariant("pdp-related-products", { anonymousId })
-    : "control";
 
   return (
     <div>
@@ -44,7 +34,6 @@ export default async function ProductPage({
           <AddToCart slug={product.slug} priceCents={product.price} />
         </ProductDetails>
       </div>
-      {variant === "related" && <RelatedProducts slug={product.slug} />}
     </div>
   );
 }
