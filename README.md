@@ -15,3 +15,10 @@ to the workspace's publishable key; the middleware gives every visitor a stable
 
 The shipping rule lives on the server (`lib/shipping.ts`) and is only revealed at
 checkout. No real plants were harmed.
+
+## Contributing
+
+Experiments arrive as pull requests from `trevo[bot]` on `trevo/*` branches:
+`trevo/experiment/<key>` adds a variant behind a flag, `trevo/cleanup/<key>`
+keeps the winner and removes the flag, `trevo/revert/<key>` removes a loser.
+Review them like any other change — the bot never merges.
