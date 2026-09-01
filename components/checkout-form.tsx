@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useExperiment, useTrevo } from "@trevosdk/react";
-import StepwiseFields from "./checkout-steps";
+import { useTrevo } from "@trevosdk/react";
 
 export default function CheckoutForm({ totalCents }: { totalCents: number }) {
   const trevo = useTrevo();
   const router = useRouter();
-  const variant = useExperiment("checkout-progressive-disclosure");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,10 +46,6 @@ export default function CheckoutForm({ totalCents }: { totalCents: number }) {
 
   return (
     <form onSubmit={submit} className="mt-6 space-y-4">
-      {variant === "stepwise" ? (
-        <StepwiseFields fieldClassName={field} />
-      ) : (
-        <>
       <label className="block text-sm font-medium">
         Full name
         <input name="name" required placeholder="Fern Enthusiast" className={field} />
@@ -85,8 +79,6 @@ export default function CheckoutForm({ totalCents }: { totalCents: number }) {
           className={field}
         />
       </label>
-        </>
-      )}
       {error && <p className="text-sm text-red-600">{error}</p>}
       <button
         type="submit"
