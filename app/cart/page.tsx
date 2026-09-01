@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { cartLines, cartTotal, readCart } from "@/lib/cart";
+import { cookies } from "next/headers";
+import { bundleOffer, cartLines, cartTotal, readCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/products";
 import { quoteShipping } from "@/lib/shipping";
 import CartReassurance from "@/components/cart-reassurance";
 import { RemoveFromCart, CheckoutButton } from "@/components/cart-actions";
+import AddToCart from "@/components/add-to-cart";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +13,7 @@ export default async function CartPage() {
   const cart = await readCart();
   const lines = cartLines(cart);
   const total = cartTotal(cart);
+  const offer = bundleOffer(cart, (await cookies()).get("trevo_id")?.value);
 
   if (lines.length === 0) {
     return (
@@ -59,6 +62,16 @@ export default async function CartPage() {
           </li>
         ))}
       </ul>
+      {offer && (
+        <div className="mt-4 flex items-center justify-between gap-4 rounded-xl bg-amber-50 p-4 text-sm">
+          <span>
+            Add <b>{offer.product.name}</b> for{" "}
+            <b>{formatPrice(offer.product.price - offer.discountCents)}</b>{" "}
+            <s className="text-stone-400">{formatPrice(offer.product.price)}</s>
+          </span>
+          <AddToCart slug={offer.product.slug} priceCents={offer.product.price - offer.discountCents} />
+        </div>
+      )}
       <div className="mt-6 flex items-center justify-between border-t border-stone-200 pt-4">
         <p className="text-stone-500">Subtotal</p>
         <p className="text-xl font-semibold">{formatPrice(total)}</p>
