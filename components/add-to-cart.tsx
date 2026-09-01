@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTrevo } from "@trevosdk/react";
 
 export default function AddToCart({
   slug,
@@ -10,6 +11,7 @@ export default function AddToCart({
   slug: string;
   priceCents: number;
 }) {
+  const trevo = useTrevo();
   const router = useRouter();
   const [state, setState] = useState<"idle" | "adding" | "added">("idle");
 
@@ -21,6 +23,7 @@ export default function AddToCart({
       body: JSON.stringify({ slug, quantity: 1 }),
     });
     if (res.ok) {
+      trevo?.track("add_to_cart", { product: slug, value: priceCents / 100 });
       setState("added");
       router.refresh();
       setTimeout(() => setState("idle"), 1500);
