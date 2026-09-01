@@ -23,8 +23,9 @@ const GROUPS: Array<{ title: string; fields: Field[] }> = [
 ];
 
 /**
- * Experiment: checkout-progressive-disclosure. Reveals one field group at a
- * time; fields not yet revealed render hidden so the POST payload is unchanged.
+ * Shipped after checkout-progressive-disclosure won. Reveals one field group
+ * at a time; fields not yet revealed render hidden so the POST payload is
+ * unchanged.
  */
 export default function StepwiseFields({ fieldClassName }: { fieldClassName: string }) {
   const [revealed, setRevealed] = useState(1);
