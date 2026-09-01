@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cartCount, readCart } from "@/lib/cart";
+import MiniCart from "./mini-cart";
 
 export default async function Header() {
   const cart = await readCart();
@@ -15,17 +16,7 @@ export default async function Header() {
           <Link href="/" className="hover:text-emerald-700">
             Shop
           </Link>
-          <Link
-            href="/cart"
-            className="relative rounded-full bg-stone-900 px-4 py-2 text-stone-50 hover:bg-stone-700"
-          >
-            Cart
-            {count > 0 && (
-              <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-500 px-1 text-xs font-semibold">
-                {count}
-              </span>
-            )}
-          </Link>
+          <MiniCart count={count} />
         </nav>
       </div>
     </header>
