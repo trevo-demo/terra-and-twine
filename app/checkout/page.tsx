@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { trevoServer } from "@/lib/trevo-server";
 import { cartLines, cartTotal, readCart } from "@/lib/cart";
 import { formatPrice } from "@/lib/products";
 import { quoteShipping } from "@/lib/shipping";
@@ -11,6 +13,14 @@ export default async function CheckoutPage() {
   const lines = cartLines(cart);
   const total = cartTotal(cart);
   const quote = quoteShipping(total);
+  // Experiment: checkout-prefill-email. Resolved server-side; the cookie value
+  // only ever prefills — the field stays editable and required.
+  const jar = await cookies();
+  const anonymousId = jar.get("trevo_id")?.value;
+  const variant = anonymousId
+    ? trevoServer()?.getVariant("checkout-prefill-email", { anonymousId })
+    : "control";
+  const defaultEmail = variant === "prefill" ? jar.get("tt_subscriber")?.value : undefined;
 
   if (lines.length === 0) {
     return (
@@ -30,7 +40,7 @@ export default async function CheckoutPage() {
     <div className="mx-auto grid max-w-3xl grid-cols-1 gap-10 md:grid-cols-2">
       <div>
         <h1 className="text-2xl font-semibold">Checkout</h1>
-        <CheckoutForm totalCents={total} />
+        <CheckoutForm totalCents={total} defaultEmail={defaultEmail} />
       </div>
       <aside className="rounded-xl border border-stone-200 bg-white p-6">
         <h2 className="font-medium">Order summary</h2>

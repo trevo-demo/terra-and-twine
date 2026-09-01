@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import { useExperiment, useTrevo } from "@trevosdk/react";
 import StepwiseFields from "./checkout-steps";
 
-export default function CheckoutForm({ totalCents }: { totalCents: number }) {
+export default function CheckoutForm({
+  totalCents,
+  defaultEmail,
+}: {
+  totalCents: number;
+  defaultEmail?: string;
+}) {
   const trevo = useTrevo();
   const router = useRouter();
   const variant = useExperiment("checkout-progressive-disclosure");
@@ -62,6 +68,7 @@ export default function CheckoutForm({ totalCents }: { totalCents: number }) {
           name="email"
           type="email"
           required
+          defaultValue={defaultEmail}
           placeholder="you@example.com"
           className={field}
         />
