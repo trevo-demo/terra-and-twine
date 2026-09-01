@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { CART_COOKIE, cartTotal, parseCart } from "@/lib/cart";
-import { quoteShipping } from "@/lib/shipping";
+import { feeVariant, quoteShipping } from "@/lib/shipping";
 import { trevoServer } from "@/lib/trevo-server";
 
 export async function POST(req: NextRequest) {
@@ -22,7 +22,8 @@ export async function POST(req: NextRequest) {
   }
 
   // Shipping is computed server-side and only revealed at checkout.
-  const quote = quoteShipping(subtotal);
+  const anonymousId = req.cookies.get("trevo_id")?.value;
+  const quote = quoteShipping(subtotal, feeVariant(anonymousId));
 
   // Demo store: no payment processing. Mint an order id and clear the cart.
   const orderId = `TT-${Date.now().toString(36).toUpperCase()}`;
@@ -30,7 +31,6 @@ export async function POST(req: NextRequest) {
   // Record the order server-side — the authoritative conversion record.
   // Idempotent via insertId, keyed to the visitor's Trevo identity cookie.
   const trevo = trevoServer();
-  const anonymousId = req.cookies.get("trevo_id")?.value;
   if (trevo && anonymousId) {
     trevo.track(
       "order_recorded",
