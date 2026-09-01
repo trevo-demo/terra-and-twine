@@ -8,6 +8,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email." }, { status: 400 });
   }
 
-  // Demo store: we don't actually store the address anywhere.
-  return NextResponse.json({ ok: true });
+  // Demo store: we don't actually store the address anywhere, but we remember
+  // it on this browser so the checkout can offer it back.
+  const res = NextResponse.json({ ok: true });
+  res.cookies.set("tt_subscriber", email, { path: "/", maxAge: 60 * 60 * 24 * 365, sameSite: "lax" });
+  return res;
 }
