@@ -114,9 +114,9 @@ export function getProduct(slug: string): Product | undefined {
 }
 
 /**
- * Experiment: pdp-related-products. Same category first, then whatever is
- * best stocked; the product itself is excluded. Runs on the server so the
- * shelf is in the HTML, not a second round-trip.
+ * Same category first, then whatever is best stocked; the product itself is
+ * excluded. Runs on the server so the shelf is in the HTML, not a second
+ * round-trip.
  */
 export function relatedProducts(slug: string, limit = 4): Product[] {
   const current = getProduct(slug);

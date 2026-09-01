@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { formatPrice, relatedProducts } from "@/lib/products";
 
-/** Experiment: pdp-related-products. Rendered only in the `related` arm. */
+/** Shipped after pdp-related-products won. */
 export default function RelatedProducts({ slug }: { slug: string }) {
   const products = relatedProducts(slug);
   if (products.length === 0) return null;
