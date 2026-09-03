@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PRODUCTS, formatPrice } from "@/lib/products";
+import CatalogTabs from "@/components/catalog-tabs";
 
 export default function Home() {
   return (
@@ -24,8 +25,10 @@ export default function Home() {
         <h2 className="mb-4 text-lg font-medium text-stone-700">
           The catalog
         </h2>
+        <CatalogTabs products={PRODUCTS}>
+          {(visible) => (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {PRODUCTS.map((product) => (
+          {visible.map((product) => (
             <Link
               key={product.slug}
               href={`/products/${product.slug}`}
@@ -44,6 +47,8 @@ export default function Home() {
             </Link>
           ))}
         </div>
+          )}
+        </CatalogTabs>
       </section>
     </div>
   );
